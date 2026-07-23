@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeopleHub | Admin Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="admin.html">
+        <img src="logo.png" width="55" height="55" class="rounded-circle bg-white me-2">
+        PeopleHub Admin
+    </a>
+    <span class="text-white me-3" id="adminNameLabel"></span>
+    <button class="btn btn-outline-light" id="adminLogoutBtn">
+        <i class="fas fa-right-from-bracket"></i> Log Out
+    </button>
+  </div>
+</nav>
+
+<div class="container py-5 text-center" id="adminLoading">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="text-muted mt-3">Checking admin session...</p>
+</div>
+
+<div class="container py-5" id="adminContent" style="display:none;">
+
+  <!-- USER FEEDBACK -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-comment-dots"></i> User Feedback</h4>
+  <div class="card shadow border-0 mb-5">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Date Sent</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="feedbackBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT MESSAGES -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-envelope-open-text"></i> Contact Messages</h4>
+  <div class="card shadow border-0 mb-5">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>From</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Date Sent</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="contactBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNTS & ATTENDANCE -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-users"></i> Accounts &amp; Attendance</h4>
+  <div class="card shadow border-0 mb-5">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Position</th>
+              <th>Date</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="accountsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOB APPLICANTS -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-file-lines"></i> Job Applicants</h4>
+  <div class="card shadow border-0 mb-5">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Date Applied</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="applicantsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGE ADMINS -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-user-shield"></i> Manage Admins</h4>
+
+  <!-- Add Admin form -->
+  <div class="card shadow border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold mb-3">Add New Admin</h5>
+
+      <div id="addAdminError" class="alert alert-danger py-2 px-3 small mb-3" style="display:none;"></div>
+      <div id="addAdminSuccess" class="alert alert-success py-2 px-3 small mb-3" style="display:none;"></div>
+
+      <form id="addAdminForm" class="row g-3">
+        <div class="col-md-8">
+          <label class="form-label">Select Employee Account</label>
+          <select class="form-select" id="newAdminAccount" required>
+            <option value="" selected disabled>Choose an existing employee...</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-user-plus"></i> Add Admin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Existing admins -->
+  <div class="card shadow border-0">
+    <div class="card-body">
+      <h5 class="fw-bold mb-3">Existing Admin</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Date Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- REPLY MODAL (shared by User Feedback and Contact Messages) -->
+<div class="modal fade" id="replyModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="replyModalTitle">Reply</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <p class="mb-1"><strong>From:</strong> <span id="replyFromEmail"></span></p>
+        <p class="mb-1" id="replySubjectRow" style="display:none;"><strong>Subject:</strong> <span id="replySubject"></span></p>
+        <div class="border rounded p-3 bg-light small mb-3" id="replyOriginalMessage" style="white-space: pre-wrap;"></div>
+
+        <div id="replyError" class="alert alert-danger py-2 px-3 small" style="display:none;"></div>
+
+        <label class="form-label">Your Reply</label>
+        <textarea class="form-control" id="replyText" rows="6" placeholder="Type your reply here..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="sendReplyBtn">
+          <i class="fas fa-paper-plane"></i> Send Reply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+/* ==========================================================
+   ADMIN SESSION GUARD
+   Runs before anything else on the page. If there's no valid
+   admin session (i.e. nobody logged in via admin-login.html),
+   this bounces the visitor straight back to admin-login.html
+   so the dashboard/data is never visible to the public.
+========================================================== */
+async function checkAdminSession() {
+    try {
+        const res = await fetch("api/admin_profile.php", { credentials: "include" });
+        const data = await res.json();
+
+        if (!data.success) {
+            window.location.href = "admin-login.html";
+            return;
+        }
+
+        document.getElementById("adminNameLabel").textContent = data.admin.name;
+        document.getElementById("adminLoading").style.display = "none";
+        document.getElementById("adminContent").style.display = "block";
+
+        // only load the accounts/applicants data once we know we're authorized
+        loadAdminData();
+        loadFeedbackMessages();
+        loadContactMessages();
+
+    } catch (err) {
+        window.location.href = "admin-login.html";
+    }
+}
+
+// Log Out button -> clears the admin session, then returns to the public homepage
+document.getElementById("adminLogoutBtn").addEventListener("click", async function () {
+    await fetch("api/admin_logout.php", { method: "POST", credentials: "include" });
+    window.location.href = "Coralde.html";
+});
+
+async function loadAdminData() {
+    const res = await fetch("api/admin_data.php", { credentials: "include" });
+    const data = await res.json();
+
+    if (!data.success) {
+        alert("Could not load admin data. Check your database connection in api/config.php.");
+        return;
+    }
+
+    // accounts & attendance table - the employee's Name/Email/Position
+    // are only written ONCE (using rowspan) and merged down the left
+    // side; every attendance record after that just adds a new row
+    // with that shift's Date / Time In / Time Out / Status.
+    const accountsBody = document.getElementById("accountsBody");
+
+    if (data.accounts.length === 0) {
+        accountsBody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">No accounts yet.</td></tr>`;
+    } else {
+        let rows = "";
+
+        data.accounts.forEach(acc => {
+            const recordCount = acc.attendance.length || 1; // at least 1 row even with no attendance yet
+
+            const deleteBtnCell = `
+                <td rowspan="${recordCount}">
+                    <button class="btn btn-sm btn-outline-danger delete-account-btn"
+                        data-id="${acc.id}" data-name="${acc.name}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </td>`;
+
+            if (acc.attendance.length === 0) {
+                // employee has registered but never logged in yet
+                rows += `
+                    <tr>
+                        <td rowspan="1">${acc.name}</td>
+                        <td rowspan="1">${acc.email}</td>
+                        <td rowspan="1">${acc.position}</td>
+                        <td colspan="4" class="text-muted">No attendance records yet.</td>
+                        ${deleteBtnCell}
+                    </tr>`;
+                return;
+            }
+
+            acc.attendance.forEach((entry, index) => {
+                const timeIn  = new Date(entry.login_time);
+                const timeOut = entry.logout_time ? new Date(entry.logout_time) : null;
+
+                // still on the clock if there's no logout_time yet;
+                // distinguish "on break" from actively working
+                let statusBadge;
+                if (timeOut) {
+                    statusBadge = `<span class="badge bg-secondary">Off Work</span>`;
+                } else if (entry.break_start && !entry.break_end) {
+                    statusBadge = `<span class="badge bg-warning text-dark">On Break</span>`;
+                } else {
+                    statusBadge = `<span class="badge bg-success">On Work</span>`;
+                }
+
+                if (index === 0) {
+                    // first row for this employee: write Name/Email/Position
+                    // (and the Delete button) once, spanning down over all
+                    // of their attendance rows
+                    rows += `
+                        <tr>
+                            <td rowspan="${recordCount}">${acc.name}</td>
+                            <td rowspan="${recordCount}">${acc.email}</td>
+                            <td rowspan="${recordCount}">${acc.position}</td>
+                            <td>${timeIn.toLocaleDateString()}</td>
+                            <td>${timeIn.toLocaleTimeString()}</td>
+                            <td>${timeOut ? timeOut.toLocaleTimeString() : "-"}</td>
+                            <td>${statusBadge}</td>
+                            ${deleteBtnCell}
+                        </tr>`;
+                } else {
+                    // later rows for the same employee: no Name/Email/Position/
+                    // Actions cells at all - the rowspan above already covers them
+                    rows += `
+                        <tr>
+                            <td>${timeIn.toLocaleDateString()}</td>
+                            <td>${timeIn.toLocaleTimeString()}</td>
+                            <td>${timeOut ? timeOut.toLocaleTimeString() : "-"}</td>
+                            <td>${statusBadge}</td>
+                        </tr>`;
+                }
+            });
+        });
+
+        accountsBody.innerHTML = rows;
+
+        // wire up each employee's Delete button
+        document.querySelectorAll(".delete-account-btn").forEach(btn => {
+            btn.addEventListener("click", async function () {
+                const id   = this.dataset.id;
+                const name = this.dataset.name;
+
+                if (!confirm(`Delete ${name}'s account? This also removes their admin access (if any) and all attendance records. This cannot be undone.`)) {
+                    return;
+                }
+
+                this.disabled = true;
+                this.textContent = "Deleting...";
+
+                try {
+                    const res = await fetch("api/delete_account.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({ account_id: id })
+                    });
+
+                    const result = await res.json();
+
+                    if (result.success) {
+                        loadAdminData(); // refresh all tables
+                    } else {
+                        alert(result.message || "Could not delete account.");
+                        this.disabled = false;
+                        this.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                    }
+                } catch (err) {
+                    alert("Could not reach the server. Please try again.");
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                }
+            });
+        });
+    }
+
+    // applicants table
+    const applicantsBody = document.getElementById("applicantsBody");
+    if (data.applicants.length === 0) {
+        applicantsBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No applicants yet.</td></tr>`;
+    } else {
+        const statusOptions = ["Pending", "Under Review", "Interview Scheduled", "Hired", "Rejected"];
+
+        applicantsBody.innerHTML = data.applicants.map(a => {
+            const currentStatus = a.status || "Pending";
+            const options = statusOptions.map(s =>
+                `<option value="${s}" ${s === currentStatus ? "selected" : ""}>${s}</option>`
+            ).join("");
+
+            return `
+            <tr>
+                <td>${a.position}</td>
+                <td>${a.name}</td>
+                <td>${a.email}</td>
+                <td>${a.phone}</td>
+                <td>${new Date(a.date_applied).toLocaleString()}</td>
+                <td>
+                    <select class="form-select form-select-sm applicant-status-select" data-id="${a.id}">
+                        ${options}
+                    </select>
+                </td>
+            </tr>`;
+        }).join("");
+
+        // wire up each applicant's status dropdown - saves as soon as changed
+        document.querySelectorAll(".applicant-status-select").forEach(select => {
+            select.addEventListener("change", async function () {
+                const applicantId = this.dataset.id;
+                const newStatus   = this.value;
+                this.disabled = true;
+
+                try {
+                    const res = await fetch("api/update_applicant_status.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({ applicant_id: applicantId, status: newStatus })
+                    });
+
+                    const result = await res.json();
+
+                    if (!result.success) {
+                        alert(result.message || "Could not update status.");
+                    }
+                } catch (err) {
+                    alert("Could not reach the server. Please try again.");
+                } finally {
+                    this.disabled = false;
+                }
+            });
+        });
+    }
+
+    // admins table
+    const adminsBody = document.getElementById("adminsBody");
+    if (data.admins.length === 0) {
+        adminsBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No admins yet.</td></tr>`;
+    } else {
+        // Determine which admin is the system admin. Prefer the real
+        // is_system_admin flag from the database if admin_data.php sends
+        // it; otherwise fall back to "whoever has the lowest id", since
+        // that's whoever was created first via api/create_admin.php.
+        const hasSystemFlag = data.admins.some(a => "is_system_admin" in a);
+        const lowestId = Math.min(...data.admins.map(a => a.id));
+
+        adminsBody.innerHTML = data.admins.map(a => {
+            const isSystemAdmin = hasSystemFlag
+                ? !!Number(a.is_system_admin)
+                : a.id === lowestId;
+
+            const actionCell = isSystemAdmin
+                ? `<span class="badge bg-secondary">Main Admin</span>`
+                : `<button class="btn btn-sm btn-outline-danger delete-admin-btn"
+                        data-id="${a.id}" data-name="${a.name}">
+                        <i class="fas fa-user-slash"></i> Remove Admin
+                   </button>`;
+
+            return `
+            <tr>
+                <td>${a.name}</td>
+                <td>${a.email}</td>
+                <td>${new Date(a.date_joined).toLocaleDateString()}</td>
+                <td>${actionCell}</td>
+            </tr>`;
+        }).join("");
+
+        // wire up each admin's Remove Admin button (system admin has none)
+        document.querySelectorAll(".delete-admin-btn").forEach(btn => {
+            btn.addEventListener("click", async function () {
+                const id   = this.dataset.id;
+                const name = this.dataset.name;
+
+                if (!confirm(`Remove admin access for ${name}? Their employee account will NOT be affected - they'll just no longer be able to log into this dashboard.`)) {
+                    return;
+                }
+
+                this.disabled = true;
+                this.textContent = "Removing...";
+
+                try {
+                    const res = await fetch("api/delete_admin.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({ admin_id: id })
+                    });
+
+                    const result = await res.json();
+
+                    if (result.success) {
+                        loadAdminData(); // refresh tables (also updates the promote dropdown)
+                    } else {
+                        alert(result.message || "Could not remove admin.");
+                        this.disabled = false;
+                        this.innerHTML = '<i class="fas fa-user-slash"></i> Remove Admin';
+                    }
+                } catch (err) {
+                    alert("Could not reach the server. Please try again.");
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-user-slash"></i> Remove Admin';
+                }
+            });
+        });
+    }
+
+    // Populate the "Select Employee Account" dropdown with employee
+    // accounts that aren't already admins - promoting an employee keeps
+    // their existing employee account intact, so already-promoted
+    // employees are just hidden here to avoid duplicate admin rows.
+    const adminEmails = new Set(data.admins.map(a => a.email.toLowerCase()));
+    const accountSelect = document.getElementById("newAdminAccount");
+    const eligibleAccounts = data.accounts.filter(acc => !adminEmails.has(acc.email.toLowerCase()));
+
+    accountSelect.innerHTML = `<option value="" selected disabled>Choose an existing employee...</option>` +
+        (eligibleAccounts.length === 0
+            ? `<option value="" disabled>No eligible employees (all are already admins)</option>`
+            : eligibleAccounts.map(acc => `
+                <option value="${acc.id}">${acc.name} (${acc.email})</option>`).join(""));
+}
+
+// Add New Admin form -> creates another admin account via api/admin_create.php
+document.getElementById("addAdminForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const accountId = document.getElementById("newAdminAccount").value;
+
+    const errorBox   = document.getElementById("addAdminError");
+    const successBox = document.getElementById("addAdminSuccess");
+    errorBox.style.display = "none";
+    successBox.style.display = "none";
+
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Adding...";
+
+    try {
+        const res = await fetch("api/admin_create.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ account_id: accountId })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            successBox.textContent = `${result.name || "Employee"} was added as an admin.`;
+            successBox.style.display = "block";
+            e.target.reset();
+            loadAdminData(); // refresh the Existing Admins table
+        } else {
+            errorBox.textContent = result.message || "Could not add admin.";
+            errorBox.style.display = "block";
+        }
+    } catch (err) {
+        errorBox.textContent = "Could not reach the server. Please try again.";
+        errorBox.style.display = "block";
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Add Admin';
+    }
+});
+
+// ==========================================================
+// SHARED REPLY MODAL LOGIC
+// Used by both "User Feedback" and "Contact Messages" tables -
+// activeReplyType tracks which one is currently open so
+// sendReplyBtn knows which endpoint/list to use.
+// ==========================================================
+
+// simple helper so message/subject text can't break the table via HTML injection
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str ?? "";
+    return div.innerHTML;
+}
+
+const replyModalEl = document.getElementById("replyModal");
+const replyModal    = new bootstrap.Modal(replyModalEl);
+let activeReplyId   = null;
+let activeReplyType = null; // "feedback" or "contact"
+
+function openReplyModal(type, opts) {
+    activeReplyType = type;
+    activeReplyId   = opts.id;
+
+    document.getElementById("replyModalTitle").textContent =
+        type === "feedback" ? "Reply to Feedback" : "Reply to Inquiry";
+    document.getElementById("replyFromEmail").textContent = opts.email;
+    document.getElementById("replyOriginalMessage").textContent = opts.message;
+    document.getElementById("replyText").value = opts.reply || "";
+    document.getElementById("replyError").style.display = "none";
+
+    const subjectRow = document.getElementById("replySubjectRow");
+    if (opts.subject) {
+        document.getElementById("replySubject").textContent = opts.subject;
+        subjectRow.style.display = "block";
+    } else {
+        subjectRow.style.display = "none";
+    }
+
+    replyModal.show();
+}
+
+// Send Reply button inside the modal -> routes to the right endpoint
+// based on whether a Feedback or a Contact Message is being answered
+document.getElementById("sendReplyBtn").addEventListener("click", async function () {
+    const replyText = document.getElementById("replyText").value.trim();
+    const errorBox   = document.getElementById("replyError");
+    errorBox.style.display = "none";
+
+    if (!replyText) {
+        errorBox.textContent = "Please write a reply before sending.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    this.disabled = true;
+    this.innerHTML = "Sending...";
+
+    const endpoint = activeReplyType === "feedback"
+        ? "api/reply_feedback.php"
+        : "api/reply_contact.php";
+
+    try {
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ id: activeReplyId, reply: replyText })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            replyModal.hide();
+            if (activeReplyType === "feedback") {
+                loadFeedbackMessages();
+            } else {
+                loadContactMessages();
+            }
+        } else {
+            errorBox.textContent = result.message || "Could not send reply.";
+            errorBox.style.display = "block";
+        }
+    } catch (err) {
+        errorBox.textContent = "Could not reach the server. Please try again.";
+        errorBox.style.display = "block";
+    } finally {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reply';
+    }
+});
+
+// ==========================================================
+// USER FEEDBACK
+// Loads every "Feedback" form submission from Coralde.html
+// ==========================================================
+async function loadFeedbackMessages() {
+    const feedbackBody = document.getElementById("feedbackBody");
+
+    try {
+        const res  = await fetch("api/feedback_messages.php", { credentials: "include" });
+        const data = await res.json();
+
+        if (!data.success) {
+            feedbackBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Could not load feedback.</td></tr>`;
+            return;
+        }
+
+        if (data.messages.length === 0) {
+            feedbackBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No feedback yet.</td></tr>`;
+            return;
+        }
+
+        feedbackBody.innerHTML = data.messages.map(m => {
+            const statusBadge = m.reply
+                ? `<span class="badge bg-success">Replied</span>`
+                : `<span class="badge bg-warning text-dark">Pending</span>`;
+
+            return `
+                <tr>
+                    <td>${escapeHtml(m.email)}</td>
+                    <td style="max-width:300px; white-space:normal;">${escapeHtml(m.message)}</td>
+                    <td>${new Date(m.date_sent).toLocaleString()}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary feedback-reply-btn"
+                            data-id="${m.id}"
+                            data-email="${escapeHtml(m.email)}"
+                            data-message="${escapeHtml(m.message)}"
+                            data-reply="${escapeHtml(m.reply || "")}">
+                            <i class="fas fa-reply"></i> ${m.reply ? "View / Edit Reply" : "Reply"}
+                        </button>
+                    </td>
+                </tr>`;
+        }).join("");
+
+        document.querySelectorAll(".feedback-reply-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                openReplyModal("feedback", {
+                    id:      this.dataset.id,
+                    email:   this.dataset.email,
+                    message: this.dataset.message,
+                    reply:   this.dataset.reply
+                });
+            });
+        });
+
+    } catch (err) {
+        feedbackBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Could not reach the server.</td></tr>`;
+    }
+}
+
+// ==========================================================
+// CONTACT MESSAGES
+// Loads every "Send us a Message" submission from contact.html
+// ==========================================================
+async function loadContactMessages() {
+    const contactBody = document.getElementById("contactBody");
+
+    try {
+        const res  = await fetch("api/contact_messages.php", { credentials: "include" });
+        const data = await res.json();
+
+        if (!data.success) {
+            contactBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Could not load messages.</td></tr>`;
+            return;
+        }
+
+        if (data.messages.length === 0) {
+            contactBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No messages yet.</td></tr>`;
+            return;
+        }
+
+        contactBody.innerHTML = data.messages.map(m => {
+            const statusBadge = m.reply
+                ? `<span class="badge bg-success">Replied</span>`
+                : `<span class="badge bg-warning text-dark">Pending</span>`;
+
+            return `
+                <tr>
+                    <td>${escapeHtml(m.first_name)} ${escapeHtml(m.last_name)}</td>
+                    <td>${escapeHtml(m.email)}</td>
+                    <td>${escapeHtml(m.subject)}</td>
+                    <td style="max-width:250px; white-space:normal;">${escapeHtml(m.message)}</td>
+                    <td>${new Date(m.date_sent).toLocaleString()}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary contact-reply-btn"
+                            data-id="${m.id}"
+                            data-email="${escapeHtml(m.email)}"
+                            data-subject="${escapeHtml(m.subject)}"
+                            data-message="${escapeHtml(m.message)}"
+                            data-reply="${escapeHtml(m.reply || "")}">
+                            <i class="fas fa-reply"></i> ${m.reply ? "View / Edit Reply" : "Reply"}
+                        </button>
+                    </td>
+                </tr>`;
+        }).join("");
+
+        document.querySelectorAll(".contact-reply-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                openReplyModal("contact", {
+                    id:      this.dataset.id,
+                    email:   this.dataset.email,
+                    subject: this.dataset.subject,
+                    message: this.dataset.message,
+                    reply:   this.dataset.reply
+                });
+            });
+        });
+
+    } catch (err) {
+        contactBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Could not reach the server.</td></tr>`;
+    }
+}
+
+checkAdminSession();
+
+</script>
+
+</body>
+</html>

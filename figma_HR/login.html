@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- ==========================================
+         META TAGS
+    =========================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PeopleHub | Home</title>
+
+    <!-- ==========================================
+         BOOTSTRAP CSS
+    =========================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ==========================================
+         FONT AWESOME
+    =========================================== -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- ==========================================
+         GOOGLE FONT
+    =========================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ==========================================
+         CUSTOM CSS
+    =========================================== -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================================
+         NAVIGATION BAR
+    =========================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="Coralde.html">
+
+                <img src="logo.png"
+                    width="55"
+                    height="55"
+                    class="rounded-circle bg-white me-2">
+
+                PeopleHub
+
+            </a>
+
+            <!-- Mobile Toggle -->
+
+            <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!-- Navigation Links -->
+
+            <div class="collapse navbar-collapse"
+                id="navbar">
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active"
+                            href="Coralde.html">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="Coralde.html#pillars">
+                            Core Pillars
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="careers.html">
+                            Careers
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="contact.html">
+                            Contact
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="btn btn-light ms-lg-3"
+                            href="login.html">
+
+                            Login
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+<!-- ==========================================
+     LOGIN SECTION
+========================================== -->
+
+<section class="login-section">
+
+<div class="container">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-5">
+
+<div class="card login-card border-0">
+
+<div class="card-body p-5">
+
+<!-- Logo -->
+
+<div class="text-center mb-4">
+
+<img src="logo.png"
+width="90"
+class="rounded-circle shadow mb-3">
+
+<h2 class="fw-bold">
+
+Welcome Back
+
+</h2>
+
+<p class="text-muted">
+
+Sign in to your PeopleHub account
+
+</p>
+
+</div>
+
+<!-- Login Error -->
+
+<div id="loginError"
+class="alert alert-danger py-2 px-3 small mb-3"
+style="display:none;">
+</div>
+
+<!-- Login Form -->
+
+<form id="loginForm">
+
+<!-- Email -->
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Email Address
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-envelope"></i>
+
+</span>
+
+<input
+type="email"
+class="form-control"
+id="loginEmail"
+placeholder="name@email.com"
+pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+title="Please enter a valid email address, e.g. name@email.com"
+required>
+
+</div>
+
+</div>
+
+<!-- Password -->
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Password
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="fas fa-lock"></i>
+
+</span>
+
+<input
+type="password"
+class="form-control"
+id="password"
+placeholder="Enter password"
+required>
+
+</div>
+
+</div>
+
+<!-- Remember -->
+
+<div class="d-flex justify-content-between mb-4">
+
+<div class="form-check">
+
+<input
+class="form-check-input"
+type="checkbox"
+id="remember">
+
+<label
+class="form-check-label"
+for="remember">
+
+Remember Me
+
+</label>
+
+</div>
+
+<a href="#"
+data-bs-toggle="modal"
+data-bs-target="#forgotModal">
+
+Forgot Password?
+
+</a>
+
+</div>
+
+<!-- Login Button -->
+
+<div class="d-grid">
+
+<button
+class="btn btn-primary btn-lg">
+
+Login
+
+</button>
+
+</div>
+
+<!-- Divider -->
+
+<div class="text-center my-4">
+
+<hr>
+
+<span class="text-muted">
+
+or continue with
+
+</span>
+
+</div>
+
+<!-- Social Login -->
+
+<div class="row">
+
+<div class="col-6">
+
+<button
+type="button"
+class="btn btn-outline-danger w-100">
+
+<i class="fab fa-google"></i>
+
+Google
+
+</button>
+
+</div>
+
+<div class="col-6">
+
+<button
+type="button"
+class="btn btn-outline-primary w-100">
+
+<i class="fab fa-facebook-f"></i>
+
+Facebook
+
+</button>
+
+</div>
+
+</div>
+
+<!-- Register -->
+
+<div class="text-center mt-4">
+
+Don't have an account?
+
+<a href="register.html">
+Create Account
+</a>
+
+</div>
+
+<!-- Admin Login button -->
+
+<div class="text-center mt-2">
+
+<a href="admin-login.html" class="btn btn-outline-secondary btn-sm mt-2">
+<i class="fas fa-user-shield"></i> Admin Login
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+     LOGIN HANDLER
+     Talks directly to the MySQL-backed api/login.php
+     (no localStorage / auth.js involved anymore).
+========================================== -->
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("password").value;
+
+    const submitBtn = e.target.querySelector("button[type='submit'], button.btn-primary");
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Logging in..."; }
+
+    const errorBox = document.getElementById("loginError");
+    errorBox.style.display = "none";
+
+    try {
+        // credentials: "include" makes sure the PHP session cookie
+        // is sent/received so login.php can remember who we are
+        const res = await fetch("api/login.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            // send the employee straight to their profile / attendance page
+            window.location.href = "profile.html";
+        } else {
+            errorBox.textContent = result.message || "Login failed. Please try again.";
+            errorBox.style.display = "block";
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Login"; }
+        }
+    } catch (err) {
+        errorBox.textContent = "Could not reach the server. Please try again.";
+        errorBox.style.display = "block";
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Login"; }
+    }
+
+});
+
+</script>
+
+
+
+<!-- ==========================================
+     FORGOT PASSWORD MODAL
+========================================== -->
+
+<div class="modal fade"
+id="forgotModal"
+tabindex="-1"
+aria-hidden="true">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h4 class="modal-title">
+
+Forgot Password
+
+</h4>
+
+<button
+type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<!-- Step 1: reset form -->
+<div id="forgotFormWrapper">
+
+<p>
+
+Enter your account email and choose a new password.
+If the email matches an existing account, your password
+will be updated right away.
+
+</p>
+
+<div id="forgotError" class="alert alert-danger py-2 px-3 small" style="display:none;"></div>
+
+<form id="forgotForm">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Email Address
+
+</label>
+
+<input
+type="email"
+class="form-control"
+id="forgotEmail"
+placeholder="name@email.com"
+pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+title="Please enter a valid email address, e.g. name@email.com"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+New Password
+
+</label>
+
+<input
+type="password"
+class="form-control"
+id="forgotNewPassword"
+placeholder="Enter new password"
+minlength="6"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Confirm New Password
+
+</label>
+
+<input
+type="password"
+class="form-control"
+id="forgotConfirmPassword"
+placeholder="Re-enter new password"
+minlength="6"
+required>
+
+</div>
+
+<div class="d-grid">
+
+<button
+type="submit"
+class="btn btn-primary">
+
+Reset Password
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- Step 2: success state -->
+<div id="forgotSuccessWrapper" style="display:none;" class="text-center py-3">
+
+<i class="fas fa-circle-check fa-3x text-success mb-3"></i>
+
+<h5 class="fw-bold">Password Updated</h5>
+
+<p class="text-muted">
+
+Your password has been changed. You can now log in
+with your new password.
+
+</p>
+
+<button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+
+Back to Login
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================
+     FORGOT PASSWORD HANDLER
+     (placed after the modal above so the elements it looks
+     up with getElementById already exist in the DOM)
+========================================== -->
+
+<script>
+
+document.getElementById("forgotForm").addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const email           = document.getElementById("forgotEmail").value.trim();
+    const newPassword     = document.getElementById("forgotNewPassword").value;
+    const confirmPassword = document.getElementById("forgotConfirmPassword").value;
+
+    const errorBox = document.getElementById("forgotError");
+    errorBox.style.display = "none";
+
+    if (newPassword !== confirmPassword) {
+        errorBox.textContent = "Passwords do not match.";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Resetting...";
+
+    try {
+        const res = await fetch("api/forgot_password.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, newPassword })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            // swap the form out for the success state
+            document.getElementById("forgotFormWrapper").style.display = "none";
+            document.getElementById("forgotSuccessWrapper").style.display = "block";
+        } else {
+            errorBox.textContent = result.message || "Could not reset password. Please try again.";
+            errorBox.style.display = "block";
+        }
+    } catch (err) {
+        errorBox.textContent = "Could not reach the server. Please try again.";
+        errorBox.style.display = "block";
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Reset Password";
+    }
+
+});
+
+// Reset the modal back to its starting state every time it's opened,
+// so a previous success/error doesn't linger on the next attempt.
+document.getElementById("forgotModal").addEventListener("show.bs.modal", function () {
+    document.getElementById("forgotForm").reset();
+    document.getElementById("forgotError").style.display = "none";
+    document.getElementById("forgotFormWrapper").style.display = "block";
+    document.getElementById("forgotSuccessWrapper").style.display = "none";
+});
+
+</script>
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer class="footer-section mt-5">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<h4>
+
+PeopleHub
+
+</h4>
+
+<p>
+
+Empowering employees,
+building careers,
+and creating opportunities.
+
+</p>
+
+</div>
+
+<div class="col-md-6 text-md-end">
+
+<p>
+
+<i class="fas fa-phone"></i>
+
+0912-345-6789
+
+</p>
+
+<p>
+
+<i class="fas fa-envelope"></i>
+
+peoplehub@gmail.com
+
+</p>
+
+<p>
+
+<i class="fas fa-location-dot"></i>
+
+Trece Martires City, Cavite
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="text-center">
+
+<p>
+
+© 2026 PeopleHub. All Rights Reserved.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+
+<!-- ==========================================
+     BOOTSTRAP JAVASCRIPT
+========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ==========================================
+     CUSTOM JAVASCRIPT
+========================================== -->
+
+<script src="script.js"></script>
+
+</body>
+</html>

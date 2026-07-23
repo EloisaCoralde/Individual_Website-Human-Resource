@@ -1,0 +1,487 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ==============GENERAL===========================*/
+
+html{
+    scroll-behavior:smooth;
+}
+body{
+    background:#f7f8fb;
+    color:#222;
+    overflow-x:hidden;
+}
+section{
+    padding:80px 0;
+}
+a{
+    text-decoration:none;
+}
+
+/* =============NAVBAR========================= */
+
+.navbar{
+    background:#2459d3 !important;
+    padding:12px 0;
+}
+.navbar-brand{
+    font-size:28px;
+    font-weight:700;
+}
+.navbar-brand img{
+    width:60px;
+    height:60px;
+    object-fit:cover;
+}
+.nav-link{
+    color:white !important;
+    margin-left:20px;
+    transition:.3s;
+    font-weight:500;
+}
+.nav-link:hover{
+
+    color:#ffd54f !important;
+
+}
+.navbar .btn{
+
+    border-radius:30px;
+    padding:8px 25px;
+    font-weight:600;
+
+}
+
+/* ===========HERO SECTION================================= */
+
+.hero{
+
+    min-height:650px;
+
+    background:
+    linear-gradient(rgba(255,255,255,.78),
+    rgba(255,255,255,.78)),
+    url("../images/hero.jpg");
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    align-items:center;
+
+}
+.hero h1{
+
+    font-size:4rem;
+    font-weight:700;
+    line-height:1.2;
+    margin-bottom:25px;
+
+}
+.hero p{
+
+    font-size:20px;
+    color:#555;
+    margin-bottom:35px;
+
+}
+.hero .btn{
+
+    padding:15px 35px;
+    font-weight:600;
+    border-radius:50px;
+
+}
+.hero-image{
+
+    width:100%;
+    border-radius:20px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.20);
+
+}
+
+/* =============CORE PILLARS===================================== */
+
+#pillars{
+
+    background:white;
+
+}
+#pillars h2{
+
+    font-size:42px;
+    font-weight:700;
+    text-align:left;
+
+}
+
+/* ==============CARDS================================== */
+
+.pillar-card{
+
+    border:none;
+    border-radius:20px;
+    transition:.4s;
+    box-shadow:0 8px 25px rgba(0,0,0,.10);
+
+}
+.pillar-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.20);
+
+}
+.card-body{
+
+    padding:40px;
+
+}
+.pillar-icon{
+
+    font-size:55px;
+    color:#2c5cff;
+
+}
+.card h3{
+
+    margin-top:20px;
+    margin-bottom:18px;
+
+    font-size:28px;
+    font-weight:600;
+
+}
+.card p{
+
+    color:#666;
+    line-height:1.8;
+
+}
+.card .btn{
+
+    margin-top:15px;
+
+    border-radius:30px;
+
+    padding:10px 25px;
+
+}
+
+/* ==============BUTTONS================================ */
+
+.btn-success{
+
+    background:#26c54f;
+    border:none;
+
+}
+.btn-success:hover{
+
+    background:#1ba442;
+
+}
+.btn-primary{
+
+    background:#2459d3;
+    border:none;
+
+}
+.btn-primary:hover{
+
+    background:#163d9e;
+
+}
+
+/* ==============FOOTER=========================== */
+
+.footer-section{
+
+    background:#6f7585;
+
+    color:white;
+
+    padding-top:70px;
+    padding-bottom:30px;
+
+}
+.footer-section h3{
+
+    font-weight:700;
+
+}
+.footer-section hr{
+
+    width:120px;
+
+    border:2px solid white;
+
+}
+.footer-section p{
+
+    font-size:18px;
+    line-height:2;
+
+}
+.footer-section i{
+
+    margin-right:10px;
+    color:#ffffff;
+
+}
+
+/* ================FEEDBACK FORM================================ */
+
+.form-control{
+
+    border-radius:10px;
+
+    padding:12px;
+
+}
+textarea.form-control{
+
+    resize:none;
+
+}
+.footer-section button{
+
+    border-radius:30px;
+    padding:12px;
+
+}
+
+/* ========================CAREER PAGE============================= */
+
+.page-header{
+
+    background:#2459d3;
+
+    color:white;
+
+    padding:90px 0;
+
+    text-align:center;
+
+}
+.job-card{
+
+    transition:.3s;
+
+}
+.job-card:hover{
+
+    transform:scale(1.03);
+
+}
+
+/* =======================LOGIN PAGE============================== */
+
+.login-section{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+    linear-gradient(rgba(255,255,255,.85),
+    rgba(255,255,255,.85)),
+    url("../images/hero.jpg");
+
+    background-size:cover;
+
+}
+.login-card{
+
+    width:420px;
+
+    border-radius:20px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+/* ====================CONTACT PAGE============================== */
+
+.contact-card{
+
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+}
+
+/* ===================LEARNING============================== */
+
+.learning-banner{
+
+    background:#2c5cff;
+
+    color:white;
+
+    padding:80px;
+
+    border-radius:20px;
+
+}
+
+/* ================WELLBEING================================ */
+
+.wellbeing-banner{
+
+    background:#00b894;
+
+    color:white;
+
+    padding:80px;
+
+    border-radius:20px;
+
+}
+
+/* =====================CULTURE=============================== */
+
+.culture-banner{
+
+    background:#8e44ad;
+
+    color:white;
+
+    padding:80px;
+
+    border-radius:20px;
+
+}
+
+/* =====================IMAGE EFFECTS============================= */
+
+img{
+
+    max-width:100%;
+
+}
+img:hover{
+
+    transition:.4s;
+
+}
+.hero-image:hover{
+
+    transform:scale(1.03);
+
+}
+
+/* =====================UTILITIES============================= */
+
+.shadow-lg{
+
+    box-shadow:0 15px 40px rgba(0,0,0,.20)!important;
+
+}
+.rounded-4{
+
+    border-radius:20px!important;
+
+}
+
+/* ====================RESPONSIVE (992px)============================ */
+
+@media(max-width:992px){
+
+.hero{
+
+    text-align:center;
+
+    padding:100px 0;
+
+}
+.hero h1{
+
+    font-size:3rem;
+}
+.hero-image{
+
+    margin-top:50px;
+}
+.nav-link{
+
+    margin-left:0;
+
+    text-align:center;
+}
+
+}
+
+/* =======================RESPONSIVE (768px)============================= */
+
+@media(max-width:768px){
+
+.hero{
+
+    min-height:auto;
+}
+.hero h1{
+
+    font-size:2.4rem;
+}
+.hero p{
+
+    font-size:17px;
+}
+#pillars h2{
+
+    text-align:center;
+}
+.card{
+
+    margin-bottom:25px;
+}
+.footer-section{
+
+    text-align:center;
+}
+.footer-section hr{
+
+    margin:auto;
+
+    margin-bottom:20px;
+}
+
+}
+
+/* ==================RESPONSIVE (576px)============================ */
+
+@media(max-width:576px){
+
+.navbar-brand{
+
+    font-size:22px;
+}
+.navbar-brand img{
+
+    width:50px;
+    height:50px;
+}
+.hero h1{
+
+    font-size:2rem;
+}
+.hero p{
+
+    font-size:16px;
+}
+.card h3{
+
+    font-size:24px;
+}
+
+}

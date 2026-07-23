@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeopleHub | Profile</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="Coralde.html">
+        <img src="logo.png" width="55" height="55" class="rounded-circle bg-white me-2">
+        PeopleHub
+    </a>
+    <button class="btn btn-outline-light" id="logoutBtn">
+        <i class="fas fa-right-from-bracket"></i> Log Out
+    </button>
+  </div>
+</nav>
+
+<div class="container py-5" id="profileContent" style="display:none;">
+
+  <!-- PROFILE HEADER -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow">
+        <div class="card-body p-5 d-flex align-items-center flex-wrap gap-4">
+          <i class="fas fa-user-circle fa-5x text-primary"></i>
+          <div class="flex-grow-1">
+            <h2 class="fw-bold mb-1" id="profileName">-</h2>
+            <p class="text-muted mb-1" id="profileEmail">-</p>
+            <p class="text-muted mb-1"><i class="fas fa-briefcase me-1"></i> <span id="profilePosition">-</span></p>
+            <p class="text-muted mb-0"><i class="fas fa-calendar me-1"></i> Joined <span id="profileJoined">-</span></p>
+          </div>
+          <button class="btn btn-outline-primary" id="editProfileBtn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="fas fa-pen"></i> Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOURS WORKED (LIVE) -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow text-center">
+        <div class="card-body p-4">
+          <h5 class="text-muted mb-2">Hours Worked (Current Session)</h5>
+          <h1 class="fw-bold text-primary" id="liveTimer">00:00:00</h1>
+          <p class="text-muted mb-0">Session started at <span id="sessionStart">-</span></p>
+          <p class="fw-bold mb-0" id="clockStatus"></p>
+
+          <!-- Time In / Time Out controls - these are the ONLY actions that
+               start/end an attendance shift. Logging in/out of the account
+               no longer does this; the employee must click these buttons
+               explicitly. -->
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button class="btn btn-success" id="timeInBtn">
+              <i class="fas fa-right-to-bracket"></i> Time In
+            </button>
+            <button class="btn btn-danger" id="timeOutBtn">
+              <i class="fas fa-right-from-bracket"></i> Time Out
+            </button>
+          </div>
+
+          <!-- Break controls -->
+          <hr>
+          <p class="text-muted mb-2">
+            Break status: <span id="breakStatus" class="fw-bold">Not started</span>
+          </p>
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-warning" id="startBreakBtn">
+              <i class="fas fa-mug-hot"></i> Start Break
+            </button>
+            <button class="btn btn-success" id="endBreakBtn" disabled>
+              <i class="fas fa-arrow-rotate-left"></i> End Break
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE LOG -->
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow">
+        <div class="card-body p-4">
+          <h4 class="fw-bold mb-3"><i class="fas fa-clock-rotate-left me-2"></i>Attendance Log</h4>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time In</th>
+                  <th>Time Out</th>
+                  <th>Break Start</th>
+                  <th>Break End</th>
+                  <th>Hours Worked</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceBody">
+                <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Edit Profile</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div id="editProfileError" class="alert alert-danger py-2 px-3 small" style="display:none;"></div>
+        <div id="editProfileSuccess" class="alert alert-success py-2 px-3 small" style="display:none;"></div>
+
+        <form id="editProfileForm">
+
+          <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="editEmail"
+                placeholder="name@email.com"
+                pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                title="Please enter a valid email address, e.g. name@email.com"
+                required>
+            <div class="form-text">This becomes your new login email.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Position / Department</label>
+            <input type="text" class="form-control" id="editPosition" placeholder="e.g. Software Developer">
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container py-5 text-center" id="profileLoading">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="text-muted mt-3">Loading your profile...</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+/* ==========================================================
+   PROFILE / ATTENDANCE PAGE SCRIPT
+   Talks directly to the MySQL-backed PHP API (no localStorage
+   / auth.js). Handles: loading the profile + attendance log,
+   the live "hours worked" timer, starting/ending a break, and
+   logging out (which sends the employee back to the homepage).
+========================================================== */
+
+let currentLoginTime = null;
+let timerInterval = null;
+let currentAccount = null;
+
+// Turns a millisecond duration into "HH:MM:SS"
+function formatDuration(ms) {
+    if (ms < 0) ms = 0;
+    const totalSeconds = Math.floor(ms / 1000);
+    const h = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const s = String(totalSeconds % 60).padStart(2, "0");
+    return `${h}:${m}:${s}`;
+}
+
+async function loadProfile() {
+    let data;
+    try {
+        const res = await fetch("api/profile.php", { credentials: "include" });
+        data = await res.json();
+    } catch (err) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (!data.success) {
+        // not logged in (or session expired) -> back to login
+        window.location.href = "login.html";
+        return;
+    }
+
+    const account = data.account;
+    currentAccount = account;
+    currentLoginTime = data.currentLoginTime;
+
+    document.getElementById("profileLoading").style.display = "none";
+    document.getElementById("profileContent").style.display = "block";
+
+    /* ---------- profile header ---------- */
+    document.getElementById("profileName").textContent = account.name;
+    document.getElementById("profileEmail").textContent = account.email;
+    document.getElementById("profilePosition").textContent = account.position || "Employee";
+    document.getElementById("profileJoined").textContent = new Date(account.date_joined).toLocaleDateString();
+    document.getElementById("sessionStart").textContent = currentLoginTime
+        ? new Date(currentLoginTime).toLocaleString()
+        : "-";
+
+    /* ---------- break status / buttons ---------- */
+    updateBreakControls(data.currentBreakStart, data.currentBreakEnd);
+
+    /* ---------- clock status + Time In / Time Out / Break button availability ---------- */
+    const clockStatusEl = document.getElementById("clockStatus");
+    const timeInBtn      = document.getElementById("timeInBtn");
+    const timeOutBtn    = document.getElementById("timeOutBtn");
+
+    if (currentLoginTime) {
+        clockStatusEl.textContent = "You are currently clocked in.";
+        clockStatusEl.className = "fw-bold mb-0 text-success";
+        timeInBtn.disabled = true;
+        timeOutBtn.disabled = false;
+    } else {
+        clockStatusEl.textContent = "You are timed out. Click Time In to start a new shift.";
+        clockStatusEl.className = "fw-bold mb-0 text-muted";
+        timeInBtn.disabled = false;
+        timeOutBtn.disabled = true;
+        // no active shift - break controls don't apply either
+        document.getElementById("startBreakBtn").disabled = true;
+        document.getElementById("endBreakBtn").disabled = true;
+        document.getElementById("liveTimer").textContent = "00:00:00";
+    }
+
+    /* ---------- attendance table ---------- */
+    const tbody = document.getElementById("attendanceBody");
+
+    if (data.attendance.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No attendance records yet.</td></tr>`;
+    } else {
+        tbody.innerHTML = data.attendance.map(entry => {
+            const timeIn = new Date(entry.login_time);
+            const timeOut = entry.logout_time ? new Date(entry.logout_time) : null;
+            const breakStart = entry.break_start ? new Date(entry.break_start) : null;
+            const breakEnd = entry.break_end ? new Date(entry.break_end) : null;
+
+            return `
+                <tr>
+                    <td>${timeIn.toLocaleDateString()}</td>
+                    <td>${timeIn.toLocaleTimeString()}</td>
+                    <td>${timeOut ? timeOut.toLocaleTimeString() : '<span class="badge bg-success">Active</span>'}</td>
+                    <td>${breakStart ? breakStart.toLocaleTimeString() : "-"}</td>
+                    <td>${breakEnd ? breakEnd.toLocaleTimeString() : "-"}</td>
+                    <td>${timeOut ? formatDuration(timeOut - timeIn) : "-"}</td>
+                </tr>`;
+        }).join("");
+    }
+
+    /* ---------- live hours-worked timer ---------- */
+    if (currentLoginTime) {
+        if (timerInterval) clearInterval(timerInterval);
+        function updateLiveTimer() {
+            const elapsed = new Date() - new Date(currentLoginTime);
+            document.getElementById("liveTimer").textContent = formatDuration(elapsed);
+        }
+        updateLiveTimer();
+        timerInterval = setInterval(updateLiveTimer, 1000);
+    }
+}
+
+// Enables/disables the Start Break & End Break buttons based on
+// whatever is already recorded for the current session.
+function updateBreakControls(breakStart, breakEnd) {
+    const statusLabel = document.getElementById("breakStatus");
+    const startBtn = document.getElementById("startBreakBtn");
+    const endBtn = document.getElementById("endBreakBtn");
+
+    if (!breakStart) {
+        statusLabel.textContent = "Not started";
+        startBtn.disabled = false;
+        endBtn.disabled = true;
+    } else if (breakStart && !breakEnd) {
+        statusLabel.textContent = "On break since " + new Date(breakStart).toLocaleTimeString();
+        startBtn.disabled = true;
+        endBtn.disabled = false;
+    } else {
+        statusLabel.textContent = "Break finished at " + new Date(breakEnd).toLocaleTimeString();
+        startBtn.disabled = true;
+        endBtn.disabled = true;
+    }
+}
+
+document.getElementById("startBreakBtn").addEventListener("click", async function () {
+    const res = await fetch("api/break_start.php", { method: "POST", credentials: "include" });
+    const result = await res.json();
+    if (!result.success) { alert(result.message || "Could not start break."); }
+    loadProfile(); // refresh to reflect the new break state
+});
+
+document.getElementById("endBreakBtn").addEventListener("click", async function () {
+    const res = await fetch("api/break_end.php", { method: "POST", credentials: "include" });
+    const result = await res.json();
+    if (!result.success) { alert(result.message || "Could not end break."); }
+    loadProfile(); // refresh to reflect the new break state
+});
+
+// Time In button -> starts a new attendance shift (login_time). This is
+// separate from logging into the account; the employee must click this
+// each time they want to start being "on the clock".
+document.getElementById("timeInBtn").addEventListener("click", async function () {
+    this.disabled = true;
+    try {
+        const res = await fetch("api/timein.php", { method: "POST", credentials: "include" });
+        const result = await res.json();
+        if (!result.success) {
+            alert(result.message || "Could not time in.");
+        }
+    } catch (err) {
+        alert("Could not reach the server. Please try again.");
+    }
+    loadProfile(); // refresh to show the new shift as active
+});
+
+// Time Out button -> the ONLY action that ends the attendance shift
+// (sets logout_time in the database). This is separate from logging
+// out of the account.
+document.getElementById("timeOutBtn").addEventListener("click", async function () {
+    if (!confirm("Time out now? This will end your attendance shift for today.")) return;
+
+    this.disabled = true;
+    try {
+        const res = await fetch("api/timeout.php", { method: "POST", credentials: "include" });
+        const result = await res.json();
+        if (!result.success) {
+            alert(result.message || "Could not time out.");
+        }
+    } catch (err) {
+        alert("Could not reach the server. Please try again.");
+    }
+    if (timerInterval) clearInterval(timerInterval);
+    loadProfile(); // refresh to show the shift as ended
+});
+
+// Log Out -> ends the account session ONLY. It no longer touches
+// attendance/logout_time - the employee must use the Time Out button
+// above for that. They can log back in later and still be "on the clock".
+document.getElementById("logoutBtn").addEventListener("click", async function () {
+    if (timerInterval) clearInterval(timerInterval);
+    await fetch("api/logout.php", { method: "POST", credentials: "include" });
+    window.location.href = "Coralde.html";
+});
+
+// Populate the Edit Profile form with current values every time the modal opens
+document.getElementById("editProfileModal").addEventListener("show.bs.modal", function () {
+    document.getElementById("editProfileError").style.display = "none";
+    document.getElementById("editProfileSuccess").style.display = "none";
+    if (currentAccount) {
+        document.getElementById("editEmail").value = currentAccount.email || "";
+        document.getElementById("editPosition").value = currentAccount.position || "";
+    }
+});
+
+// Save Changes -> updates email/position via api/update_profile.php
+document.getElementById("editProfileForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email    = document.getElementById("editEmail").value.trim();
+    const position = document.getElementById("editPosition").value.trim();
+
+    const errorBox   = document.getElementById("editProfileError");
+    const successBox = document.getElementById("editProfileSuccess");
+    errorBox.style.display = "none";
+    successBox.style.display = "none";
+
+    const submitBtn = e.target.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+
+    try {
+        const res = await fetch("api/update_profile.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, position })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            successBox.textContent = "Profile updated successfully.";
+            successBox.style.display = "block";
+            loadProfile(); // refresh header with the new values
+        } else {
+            errorBox.textContent = result.message || "Could not update profile.";
+            errorBox.style.display = "block";
+        }
+    } catch (err) {
+        errorBox.textContent = "Could not reach the server. Please try again.";
+        errorBox.style.display = "block";
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Save Changes";
+    }
+});
+
+loadProfile();
+
+</script>
+
+</body>
+</html>
